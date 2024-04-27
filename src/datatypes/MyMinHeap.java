@@ -1,4 +1,4 @@
-package tasks;
+package datatypes;
 
 public class MyMinHeap {
 }

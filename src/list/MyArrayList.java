@@ -1,4 +1,4 @@
-package tasks;
+package list;
 
 public abstract class  MyArrayList<T extends Object & Comparable<T>> implements MyList<T> {
     private static final int default_size = 5;
