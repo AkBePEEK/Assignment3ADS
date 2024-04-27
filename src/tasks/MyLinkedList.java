@@ -180,33 +180,53 @@ public class MyLinkedList<E extends Object & Comparable<E>> implements MyList<E>
     @Override
     public int lastIndexOf(Object object) {
         MyNode<E> node = tail;
-        int t = -1;
+        int res = -1;
         for (int i = 0; i < size; i++) {
             if (node.data.equals(object))
-                t = i;
+                res = i;
             node = node.prev;
         }
-        return t;
+        return res;
     }
 
     @Override
     public boolean exists(Object object) {
-        return false;
+        return indexOf(object) != -1;
     }
 
     @Override
     public E[] toArray() {
-        return new ;
+        E[] arr = (E[]) new Object[size];
+        MyNode<E> node = head;
+        for (int i = 0; i < size; i++){
+            arr[i] = node.data;
+            node = node.next;
+        }
+        return arr;
     }
 
     @Override
     public void clear() {
-
+        head = null;
+        tail = null;
+        size = 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        MyNode<E> h = head;
+        while (h != null) {
+            str.append(h.data).append(" ");
+            h = h.next;
+        }
+        str.deleteCharAt(str.length() - 1);
+        return str.toString();
     }
 
     @Override
