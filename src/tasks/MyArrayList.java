@@ -1,14 +1,17 @@
 package tasks;
 
-import java.util.Iterator;
-
 public abstract class  MyArrayList<T extends Object & Comparable<T>> implements MyList<T> {
-    private T[] arr = (T[]) new Object[5];
+    private static final int default_size = 5;
+    private T[] arr;
     private int size;
-    private Object[] List(){
-        arr = (T[]) new Object[5];
-        size = 0;
-        return arr;
+    private MyArrayList(){
+        this(default_size);
+    }
+
+    public MyArrayList(int size) {
+        if (size < 0)
+            throw new IllegalArgumentException("Illegal ArrayList size: " + size);
+        this.arr = createArray(size);
     }
 
     private void checkIndex(int index) {
@@ -17,7 +20,7 @@ public abstract class  MyArrayList<T extends Object & Comparable<T>> implements 
     }
 
     private void increaseBuffer() {
-        T[] newArr = (T[]) new Object[arr.length * 2];
+        T[] newArr = createArray(size * 2);
         if (size >= 0) System.arraycopy(arr, 0, newArr, 0, size);
         arr = newArr;
     }
@@ -33,10 +36,16 @@ public abstract class  MyArrayList<T extends Object & Comparable<T>> implements 
             arr[i-1] = arr[i];
         }
     }
+    @SuppressWarnings(value = "unchecked")
+    private T[] createArray(int size) {
+        return (T[]) new Object[size];
+    }
 
     @Override
     public Object[] toArray() {
-        return List();
+        T[] array = createArray(size);
+        if (size >= 0) System.arraycopy(arr, 0, array, 0, size);
+        return array;
     }
 
     @Override
@@ -92,7 +101,8 @@ public abstract class  MyArrayList<T extends Object & Comparable<T>> implements 
 
     @Override
     public void clear() {
-        arr = (T[]) new Object[5];
+        for (int i = 0; i < size; i++)
+            arr[i] = null;
         size = 0;
     }
 
@@ -109,14 +119,19 @@ public abstract class  MyArrayList<T extends Object & Comparable<T>> implements 
 
     @Override
     public void sort() {
+        boolean swapped;
         for (int i = 0; i < arr.length; i++){
-            for (int j = i + 1; j < arr.length; j++){
-                if (arr[i] > arr[j]){
+            swapped = false;
+            for (int j = 0; j < arr.length - i - 1; j++){
+                if (arr[j].compareTo(arr[j + 1]) > 0){
                     T cell = arr[i];
                     arr[i] = arr[j];
                     arr[j] = cell;
+                    swapped = true;
                 }
             }
+            if (!swapped)
+                break;
         }
     }
 }
